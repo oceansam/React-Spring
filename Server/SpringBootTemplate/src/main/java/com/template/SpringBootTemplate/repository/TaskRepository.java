@@ -1,9 +1,8 @@
 package com.template.SpringBootTemplate.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.repository.CrudRepository;
 
-import com.template.SpringBootTemplate.model;
+import com.template.SpringBootTemplate.model.Task;
 
-@Repository
-public interface TaskRepository extends JpaRepository<Task>
+public interface TaskRepository extends CrudRepository<Task, Long> {
+}

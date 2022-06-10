@@ -1,11 +1,6 @@
-package com.template.SpringBootTemplate.model
+package com.template.SpringBootTemplate.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
 @Entity
 public class Task {
@@ -16,13 +11,13 @@ public class Task {
     public Task(String name, boolean isComplete){
         super();
         this.name = name;
-        this.isComplete = isComplete
+        this.isComplete = isComplete;
     }
 
     public String getName() {
         return name;
     }
-    public String getIsComplete(){
+    public boolean getIsComplete(){
         return isComplete;
     }
 
@@ -31,7 +26,7 @@ public class Task {
     }
 
     public void setIsComplete(boolean complete){
-        this.isComplete = complete
+        this.isComplete = complete;
     }
 
 }
