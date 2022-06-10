@@ -1,10 +1,12 @@
 package com.template.SpringBootTemplate.model;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Entity
 public class Task {
 
+    @Id
     private String name;
     private boolean isComplete;
 
@@ -13,6 +15,8 @@ public class Task {
         this.name = name;
         this.isComplete = isComplete;
     }
+
+
 
     public String getName() {
         return name;
