@@ -1,34 +1,63 @@
-import {useState} from "react"
-import { Box, Button, Card, CardActionArea, CardContent, TextField, Switch } from '@mui/material';
+import {useEffect, useState} from "react"
+import { Box, Button, Card, CardActionArea, CardContent, TextField, Switch, CircularProgress, Grid } from '@mui/material';
 import './App.scss';
-import TaskCard from "./components/TaskCard.jsx";
-import {    createTask,
-  getTasks
-} from "./lib/request";
+import {  createTask, getTasks} from "./lib/request";
+import TaskCard from "./components/TaskCard";
 function App() {
 
   // Task completion
   const [isComplete, setIsComplete] = useState(false);
+  const [isLoading, setLoading] = useState(false);
+  const [taskList, setTaskList] = useState([]);
+  const [pendingTaskList, setPendingTaskList] = useState([]);
 
-  const handleChange = (event) => {
-    setIsComplete(event.target.isComplete);
-  };
 
   const [newTaskName, setTaskName] = useState("");
 
   function addTask(){
-    console.log({newTaskName, isComplete })
-    console.log("Adding Task")
-    // createTask({newTaskName,isComplete })
-    getTasks();
+    createTask({newTaskName,isComplete })
+    fetchTasks()
   }
+
+  // Run async method in useEffect lifecycle
+  async function fetchTasks(){
+    setLoading(true);
+
+    const taskRes = await getTasks()
+    setTaskList(taskRes.filter((task) => task.isComplete))
+    setPendingTaskList(taskRes.filter((task) => !task.isComplete))
+    setLoading(false)
+  }
+  useEffect(() => {
+    fetchTasks();
+    
+
+  },[])
 
   return (
     <div className="App">
-      <h6 className="txt-header text-white">Todo App</h6>
+      <h6 className="txt-header text-white text-center">Todo App</h6>
+      <Grid container spacing={2} sx={{px: 5}}>
 
-      <Box
-      sx={{display: 'flex', justifyContent: 'center'}}
+        <Grid item xs={3}  >
+        <Box className="row justify-center text-white" >
+            Pending
+          </Box>
+          {isLoading ? <CircularProgress/> : 
+            pendingTaskList.map((task,i) => <TaskCard task={task} key={i} />)
+          }
+        </Grid>
+        <Grid item xs={3} >
+          <Box className="row justify-center text-white" >
+            Completed
+          </Box>
+          {isLoading ? <CircularProgress/> : 
+            taskList.map((task,i) => <TaskCard task={task} fetchTasks={fetchTasks} key={i} customColor="#88498F"/>)
+          }
+        </Grid>
+        <Grid item xs={6}>
+        <Box
+      className="row justify-center"
       >
         <div>
 
@@ -42,8 +71,8 @@ function App() {
         />
         <div>
         <Switch
-        isComplete={isComplete}
-        onChange={handleChange}
+        checked={isComplete}
+        onChange={(e) => setIsComplete(!isComplete)}
         inputProps={{ 'aria-label': 'controlled' }}
         />
         <div>Is Complete?</div>
@@ -58,15 +87,9 @@ function App() {
       </div>
 
       </Box>
+        </Grid>
+      </Grid>
 
-      <Box sx={{display: 'flex', justifyContent: "center", m:1}}>
-        {
-          [1,2,3,4].map((num) => {
-            return <TaskCard />
-
-          })
-        }
-      </Box>
     </div>
   );
 }

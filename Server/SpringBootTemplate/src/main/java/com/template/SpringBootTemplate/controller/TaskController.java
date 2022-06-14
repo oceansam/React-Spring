@@ -1,9 +1,15 @@
 package com.template.SpringBootTemplate.controller;
 
+import java.net.URISyntaxException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,16 +31,17 @@ public class TaskController {
     }
 
     @PostMapping(value = { "/task", })
-    public Task createTask(@RequestParam(name = "name") String taskName,
-            @RequestParam(name = "isComplete") boolean isTaskComplete) {
-        try {
-            Task newTask = taskService.createTask(taskName, isTaskComplete || false);
-            return newTask;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+    public Task createTask(@RequestBody Task taskData) throws URISyntaxException {
+        Task res = taskService.createTask(taskData);
+        return res;
 
+    }
+
+    @DeleteMapping(value = { "/task/{id}" })
+    public void deleteTask(@PathVariable long id) {
+        System.out.println("SAM-HERE");
+        System.out.println(id);
+        taskService.deleteTask(id);
     }
 
 }

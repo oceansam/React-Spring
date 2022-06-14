@@ -9,14 +9,17 @@ import {
   TextField,
   DialogActions,
   Button,
+  Divider,
 } from "@mui/material";
 import "../styles/Card.scss";
 import CardOptions from "./CardOptions.jsx";
+import { deleteTask } from "../lib/request";
+
 import { ACTION_TYPE } from "../lib/enum";
 // Dialog
 function EditTaskDialog(props) {
-  const { onClose, taskData, open } = props;
-  const [newTaskName, setTaskName] = useState("");
+  const { onClose, task, open } = props;
+  const [newTaskName, setTaskName] = useState(task.name);
   function handleClose() {
     setTaskName("");
     onClose();
@@ -52,12 +55,16 @@ function EditTaskDialog(props) {
 }
 
 // Task Card
-export default function TaskCard(taskData) {
+export default function TaskCard(props) {
   const [open, setOpen] = useState(false);
-
+  const { fetchTasks } = props;
   function handleAction(actionType) {
     if (actionType === ACTION_TYPE.EDIT) {
       setOpen(true);
+    }
+    if (actionType === ACTION_TYPE.DELETE) {
+      deleteTask(props.task.id);
+      fetchTasks();
     }
   }
 
@@ -66,13 +73,20 @@ export default function TaskCard(taskData) {
   }
   return (
     <>
-      <EditTaskDialog open={open} task={taskData} onClose={handleClose} />
-      <Card sx={{ backgroundColor: "#FF6542", mr: 3 }}>
-        <Box sx={{ display: "flex", flexDirection: "column" }}>
-          <CardContent sx={{ flex: "1 0 auto" }}>
-            <div className={"txt-header text-white"}>FullStack Lesson #1</div>
+      <EditTaskDialog open={open} task={props.task} onClose={handleClose} />
+      <Card
+        sx={{
+          backgroundColor: props.customColor || "#FF6542",
+          mt: 3,
+          maxWidth: "350px",
+        }}
+      >
+        <Box>
+          <CardContent>
+            <div className={"txt-header text-white"}>{props.task.name}</div>
+            <Divider textAlign="left" />
           </CardContent>
-          <CardOptions handleAction={handleAction} />
+          <CardOptions handleAction={handleAction} taskData={props.task} />
         </Box>
       </Card>
     </>

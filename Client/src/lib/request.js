@@ -1,15 +1,19 @@
 import axios from "axios";
 
-const AXIOS = axios.create({baseURL: 'http://localhost:8080', headers:{ 'Access-Control-Allow-Origin': 'http://localhost:3000'}})
 
 export async function getTasks(){
-    const res = await AXIOS.get('http://localhost:8080/api/task')
-
+    const res = await axios.get('http://localhost:8080/api/task')
+    console.log(res.data)
     return res.data
 }
 
+export async function deleteTask(id){
+    const res = await axios.delete(`http://localhost:8080/api/task/${id}`);
+    console.log(res.data)
+    return res;
+}
 export async function createTask({newTaskName, isComplete}){
-    const res = await AXIOS.post('/api/task', {params: {name: newTaskName, isComplete}});
-    console.log('Response:',res);
+    console.log(newTaskName, isComplete)
+    const res = await axios.post('http://localhost:8080/api/task',  {name: newTaskName,  isComplete});
     return res.data
 }
