@@ -35,8 +35,10 @@ public class TaskService {
     taskRepo.save(currentTask);
   }
 
+  @Transactional
   public List<Task> getTasks() {
-    List<Task> allTasks = taskRepo.findAll();
+    List<Task> allTasks = taskRepo.findByIsComplete(true);
+    System.out.println("sho");
     System.out.println(allTasks);
     if (allTasks.size() < 1) {
       throw new NoSuchElementException("Empty query");

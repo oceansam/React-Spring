@@ -6,7 +6,6 @@ import { Box, Tooltip } from "@mui/material";
 import { ACTION_TYPE } from "../lib/enum";
 export default function CardOptions({ handleAction }) {
   function cardAction(actionType) {
-    console.log("card-action");
     handleAction(actionType);
   }
 
@@ -15,7 +14,7 @@ export default function CardOptions({ handleAction }) {
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <div>
           <Tooltip title="Mark as complete">
-            <IconButton onClick={() => console.log("mark as complete")}>
+            <IconButton onClick={() => cardAction(ACTION_TYPE.MARK)}>
               <TaskAltIcon style={{ color: "1E1B18" }} />
             </IconButton>
           </Tooltip>

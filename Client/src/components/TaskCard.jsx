@@ -55,16 +55,20 @@ function EditTaskDialog(props) {
 }
 
 // Task Card
-export default function TaskCard(props) {
+export default function TaskCard({ task, fetchTasks, customColor }) {
   const [open, setOpen] = useState(false);
-  const { fetchTasks } = props;
-  function handleAction(actionType) {
+
+  function refreshData() {
+    fetchTasks();
+  }
+  // const { task, fetchTasks, customColor } = props;
+  async function handleAction(actionType) {
     if (actionType === ACTION_TYPE.EDIT) {
       setOpen(true);
     }
     if (actionType === ACTION_TYPE.DELETE) {
-      deleteTask(props.task.id);
-      fetchTasks();
+      deleteTask(task.id);
+      refreshData();
     }
   }
 
@@ -73,20 +77,20 @@ export default function TaskCard(props) {
   }
   return (
     <>
-      <EditTaskDialog open={open} task={props.task} onClose={handleClose} />
+      <EditTaskDialog open={open} task={task} onClose={handleClose} />
       <Card
         sx={{
-          backgroundColor: props.customColor || "#FF6542",
+          backgroundColor: customColor || "#FF6542",
           mt: 3,
           maxWidth: "350px",
         }}
       >
         <Box>
           <CardContent>
-            <div className={"txt-header text-white"}>{props.task.name}</div>
+            <div className={"txt-header text-white"}>{task.name}</div>
             <Divider textAlign="left" />
           </CardContent>
-          <CardOptions handleAction={handleAction} taskData={props.task} />
+          <CardOptions handleAction={handleAction} />
         </Box>
       </Card>
     </>
